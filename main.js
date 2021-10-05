@@ -3,6 +3,7 @@ displayNotes();
 
 targetBtn.addEventListener('click', function (e) {
     let text = document.getElementById('targetText');
+    let title=document.getElementById('title');
     let notes = localStorage.getItem("notes");
     if (notes == null) {
         notesObj = [];
@@ -10,9 +11,14 @@ targetBtn.addEventListener('click', function (e) {
     else {
         notesObj = JSON.parse(notes);
     }
-    notesObj.push(text.value);
+    let myObj={
+        title:title.value,
+        text:text.value
+    }
+    notesObj.push(myObj);
     localStorage.setItem("notes", JSON.stringify(notesObj));
     text.value = "";
+    title.value="";
     displayNotes();
 });
 
@@ -32,8 +38,8 @@ function displayNotes() {
         html += `
         <div class="noteCard card my-2 mx-2" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title">Note ${index+1}</h5>
-            <p class="card-text">${element}</p>
+                <h5 class="card-title">${element.title}</h5>
+            <p class="card-text">${element.text}</p>
             <button id="${index}" onclick="deleteNote(this.id)" class="btn btn-primary">Delete Note</button>
             </div>
         </div>`;
@@ -68,6 +74,7 @@ searchTxt.addEventListener("input",function(){
     inputVal=searchTxt.value;
     let noteCards=document.getElementsByClassName('noteCard');
     Array.from(noteCards).forEach(function(element){
+        // console.log(element);
         let para=element.getElementsByTagName("p")[0].innerText;
         // console.log(para);
         if(para.includes(inputVal)){
